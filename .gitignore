@@ -1,0 +1,14 @@
+# Derlenmiş dosyalar
+*.exe
+*.o
+*.obj
+
+# Editör ve işletim sistemi dosyaları
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Gizli yapılandırmalar
+.env
+*.key

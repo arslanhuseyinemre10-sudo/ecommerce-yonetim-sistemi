@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Emre Commerce Yönetim Paneli</title>
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="auth-screen" id="authScreen">
+  <div class="auth-hero"><div class="auth-brand"><b>E</b> Emre Commerce</div><div class="auth-copy"><h1>Tüm mağazan tek bir panelde.</h1><p>Ürünlerini, stoklarını ve siparişlerini hızlı ve güvenli biçimde yönet.</p><div class="auth-points"><span>✓ Stok takibi</span><span>✓ Sipariş yönetimi</span><span>✓ Detaylı raporlar</span></div></div><small>© 2026 Emre Commerce</small></div>
+  <div class="auth-panel">
+    <div class="auth-box">
+      <h2 id="authTitle">Tekrar hoş geldin</h2><p id="authDesc">Devam etmek için hesabına giriş yap.</p>
+      <form class="auth-form" id="authForm">
+        <div class="field hidden" id="emailField"><label>E-POSTA</label><input id="authEmail" type="email" placeholder="ornek@email.com"></div>
+        <div class="field"><label>KULLANICI ADI</label><input id="authUsername" required autocomplete="username" placeholder="Kullanıcı adın"></div>
+        <div class="field"><label>PAROLA</label><input id="authPassword" required minlength="4" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+        <div class="auth-error" id="authError"></div><button class="btn primary" id="authSubmit">Giriş yap</button>
+      </form>
+      <p class="auth-switch"><span id="switchText">Hesabın yok mu?</span> <button id="authSwitch" type="button">Kayıt ol</button></p>
+    </div>
+  </div>
+</section>
+<div class="app hidden" id="appRoot">
+  <aside class="side" id="side">
+    <div class="logo"><div class="logo-mark">E</div> Emre Commerce</div>
+    <nav class="nav" id="nav">
+      <button class="active" data-page="dashboard"><span>⌂</span> Dashboard</button>
+      <button data-page="products"><span>□</span> Ürünler</button>
+      <button data-page="categories"><span>▦</span> Kategoriler</button>
+      <button data-page="orders"><span>🛒</span> Siparişler</button>
+      <button data-page="stock"><span>↕</span> Stok Hareketleri</button>
+      <button data-page="logs"><span>≡</span> Sistem Logları</button>
+    </nav>
+    <div class="profile"><div class="avatar" id="profileLetter">E</div><div><b id="profileName">Emre</b><small>Yönetici</small></div><button class="logout" id="logout" title="Çıkış yap">Çıkış</button></div>
+  </aside>
+  <main>
+    <header class="top">
+      <div><button class="btn mobile-menu" id="menuBtn">☰</button><h1 id="title">Dashboard</h1><p id="subtitle">E-ticaret sisteminin genel durumu</p></div>
+      <div class="actions"><button class="btn">↻ Yenile</button><button class="btn primary" id="addProductTop">+ Ürün ekle</button></div>
+    </header>
+
+    <section class="page active" id="dashboard">
+      <div class="cards">
+        <div class="card metric"><div><label>Toplam ürün</label><strong id="productCount">0</strong><small>Aktif katalog</small></div><div class="icon">□</div></div>
+        <div class="card metric"><div><label>Toplam stok</label><strong id="stockCount">0</strong><small>Mevcut birim</small></div><div class="icon">▦</div></div>
+        <div class="card metric"><div><label>Siparişler</label><strong>8</strong><small>↑ Bu ay %12</small></div><div class="icon">🛒</div></div>
+        <div class="card metric"><div><label>Toplam satış</label><strong>₺125B</strong><small>↑ Bu ay %8</small></div><div class="icon">₺</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h2>Haftalık satışlar</h2><div class="chart"><div class="bar" style="height:42%" data-day="Pzt"></div><div class="bar" style="height:68%" data-day="Sal"></div><div class="bar" style="height:51%" data-day="Çar"></div><div class="bar" style="height:82%" data-day="Per"></div><div class="bar" style="height:61%" data-day="Cum"></div><div class="bar" style="height:94%" data-day="Cmt"></div><div class="bar" style="height:73%" data-day="Paz"></div></div></div>
+        <div class="card"><h2>Stoku azalan ürünler</h2><div id="lowStock"></div></div>
+      </div>
+    </section>
+
+    <section class="page" id="products">
+      <div class="toolbar"><input class="search" id="productSearch" placeholder="Ürün ara..."><button class="btn primary" id="addProduct">+ Yeni ürün</button></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Ürün</th><th>Kategori</th><th>Fiyat</th><th>Stok</th><th>Durum</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
+    </section>
+    <section class="page" id="categories"><div class="cards"><div class="card"><h2>💻 Bilgisayar</h2><strong>2 ürün</strong></div><div class="card"><h2>📱 Telefon</h2><strong>1 ürün</strong></div><div class="card"><h2>⌨️ Aksesuar</h2><strong>2 ürün</strong></div></div></section>
+    <section class="page" id="orders"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Kullanıcı</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>Tarih</th></tr></thead><tbody><tr><td>#108</td><td>emre</td><td>Laptop x1</td><td>₺25.000</td><td><span class="pill">Oluşturuldu</span></td><td>22.07.2026</td></tr><tr><td>#107</td><td>arda</td><td>Mouse x2</td><td>₺1.700</td><td><span class="pill">Tamamlandı</span></td><td>21.07.2026</td></tr></tbody></table></div></section>
+    <section class="page" id="stock"><div class="table-wrap"><table><thead><tr><th>Ürün</th><th>Değişim</th><th>Neden</th><th>Kullanıcı</th><th>Tarih</th></tr></thead><tbody><tr><td>Laptop</td><td style="color:var(--red)">-1</td><td>Sipariş</td><td>emre</td><td>22.07.2026 10:32</td></tr><tr><td>Mouse</td><td style="color:var(--green)">+10</td><td>Manuel</td><td>emre</td><td>21.07.2026 17:10</td></tr></tbody></table></div></section>
+    <section class="page" id="logs"><div class="table-wrap"><table><thead><tr><th>İşlem</th><th>Açıklama</th><th>Kullanıcı</th><th>Tarih</th></tr></thead><tbody><tr><td><b>LOGIN</b></td><td>Kullanıcı giriş yaptı.</td><td>emre</td><td>22.07.2026 10:21</td></tr><tr><td><b>CREATE_ORDER</b></td><td>Laptop x1 sipariş edildi.</td><td>emre</td><td>22.07.2026 10:32</td></tr></tbody></table></div></section>
+  </main>
+</div>
+
+<dialog id="productDialog"><form class="modal" id="productForm"><h2>Yeni ürün ekle</h2><div class="form"><div class="field full"><label>ÜRÜN ADI</label><input id="pName" required placeholder="Örn. Gaming Laptop"></div><div class="field"><label>FİYAT</label><input id="pPrice" required type="number" min="0" step="0.01"></div><div class="field"><label>STOK</label><input id="pStock" required type="number" min="0"></div><div class="field full"><label>KATEGORİ</label><select id="pCategory"><option>Bilgisayar</option><option>Telefon</option><option>Aksesuar</option></select></div></div><div class="modal-actions"><button type="button" class="btn" id="cancel">Vazgeç</button><button class="btn primary">Ürünü kaydet</button></div></form></dialog>
+
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
