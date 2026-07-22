@@ -6,6 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "start:portable": "node server-portable.js",
     "dev": "node --watch server.js",
     "check": "node --check server.js && node --check js/app.js"
   },

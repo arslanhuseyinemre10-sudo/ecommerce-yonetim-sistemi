@@ -52,9 +52,11 @@ docker compose up --build
 
 Elasticsearch kullanılmayacaksa `.env` içinde `ELASTICSEARCH_ENABLED=false` bırakın. Kullanılacaksa `true` yapın.
 
+Elasticsearch'i tek başına başlatmak için `elasticsearch-baslat.bat` dosyasına çift tıklayabilirsiniz. Uygulama başlarken MySQL'deki ürünler `products` indeksine aktarılır. Ürün aramaları Elasticsearch ile yapılır; ürün ekleme ve silme işlemleri indeksi otomatik günceller. Elasticsearch geçici olarak kapalıysa arama MySQL'e geri döner.
+
 ## Güvenlik
 
 - MySQL parolası ve JWT anahtarı GitHub'a yüklenmez.
-- Kullanıcı parolaları düz metin olarak değil bcrypt hash olarak saklanır.
+- Kullanıcı parolaları düz metin olarak değil scrypt hash olarak saklanır; eski bcrypt kayıtları da desteklenir.
 - API uçları giriş tokenı olmadan kullanılamaz.
 - SQL sorguları parametreli çalışır.

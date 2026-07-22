@@ -2,10 +2,10 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const pool = require('./src/db');
 const { createToken, requireAuth } = require('./src/auth');
 const elastic = require('./src/elastic');
+const { hashPassword, verifyPassword } = require('./src/password');
 
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 24) {
   throw new Error('JWT_SECRET en az 24 karakter olmalıdır. .env dosyasını kontrol edin.');
@@ -31,7 +31,12 @@ async function addLog(connection, userId, action, description) {
 
 app.get('/api/health', asyncRoute(async (_req, res) => {
   await pool.query('SELECT 1');
-  res.json({ ok: true, mysql: true, elasticsearch: process.env.ELASTICSEARCH_ENABLED === 'true' });
+  res.json({
+    ok: true,
+    mysql: true,
+    elasticsearch: await elastic.health(),
+    elasticsearch_enabled: elastic.enabled()
+  });
 }));
 
 app.post('/api/auth/register', asyncRoute(async (req, res) => {
@@ -49,7 +54,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
   );
   if (existing.length) return res.status(409).json({ message: 'Kullanıcı adı veya e-posta kullanılıyor.' });
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await hashPassword(password);
   const [result] = await pool.execute(
     "INSERT INTO users(username, password, password_hash, email) VALUES (?, '', ?, ?)",
     [username, passwordHash, email]
@@ -67,7 +72,7 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
     [username]
   );
   const user = rows[0];
-  if (!user || !user.password_hash || !(await bcrypt.compare(password, user.password_hash))) {
+  if (!user || !(await verifyPassword(password, user.password_hash))) {
     return res.status(401).json({ message: 'Kullanıcı adı veya parola yanlış.' });
   }
   await addLog(pool, user.id, 'LOGIN', `${user.username} giriş yaptı.`);
@@ -108,7 +113,12 @@ app.post('/api/products', requireAuth, asyncRoute(async (req, res) => {
     'INSERT INTO products(name, price, stock, category_id) VALUES (?, ?, ?, ?)',
     [name, price, stock, categoryId]
   );
-  const product = { id: result.insertId, name, price, stock, category_id: categoryId };
+  const [[product]] = await pool.execute(`
+    SELECT p.id, p.name, p.price, p.stock, p.category_id,
+      COALESCE(c.name, 'Kategorisiz') category
+    FROM products p LEFT JOIN categories c ON c.id = p.category_id
+    WHERE p.id = ?
+  `, [result.insertId]);
   await addLog(pool, req.user.id, 'ADD_PRODUCT', `${name} ürünü eklendi.`);
   await elastic.indexProduct(product).catch(error => console.warn(error.message));
   res.status(201).json(product);
@@ -250,7 +260,17 @@ app.listen(port, async () => {
     await pool.query('SELECT 1');
     console.log(`Emre Commerce: http://localhost:${port}`);
     console.log('MySQL bağlantısı başarılı.');
+    if (elastic.enabled()) {
+      const [products] = await pool.query(`
+        SELECT p.id, p.name, p.price, p.stock, p.category_id,
+          COALESCE(c.name, 'Kategorisiz') category
+        FROM products p LEFT JOIN categories c ON c.id = p.category_id
+        ORDER BY p.id
+      `);
+      await elastic.replaceProducts(products);
+      console.log(`Elasticsearch bağlantısı başarılı. ${products.length} ürün aktarıldı.`);
+    }
   } catch (error) {
-    console.error('MySQL bağlantısı başarısız:', error.message);
+    console.error('Başlangıç bağlantı hatası:', error.message);
   }
 });
