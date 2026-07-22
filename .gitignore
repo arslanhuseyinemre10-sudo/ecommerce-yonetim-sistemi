@@ -12,3 +12,5 @@ Thumbs.db
 # Gizli yapılandırmalar
 .env
 *.key
+node_modules/
+npm-debug.log*

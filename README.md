@@ -1,37 +1,60 @@
 # E-Commerce Yönetim Sistemi
 
-C, MySQL, HTML, CSS ve JavaScript kullanılarak geliştirilen modüler e-ticaret yönetim projesidir.
+C, MySQL, Node.js, HTML, CSS, JavaScript ve isteğe bağlı Elasticsearch kullanılan modüler e-ticaret yönetim projesi.
 
-## Özellikler
+## Tamamlanan özellikler
 
-- Kullanıcı kayıt ve giriş sistemi
-- Ürün ve kategori yönetimi
-- Sipariş oluşturma
-- Stok hareketleri
-- Sistem logları
-- Yönetim paneli arayüzü
-- İsteğe bağlı Elasticsearch entegrasyonu
+- Güvenli kullanıcı kayıt ve giriş sistemi (bcrypt + JWT)
+- MySQL bağlantılı ürün ve kategori yönetimi
+- Transaction kullanan sipariş oluşturma
+- Otomatik ve manuel stok hareketleri
+- Gerçek sistem logları ve dashboard değerleri
+- Modüler HTML, CSS ve JavaScript arayüzü
+- İsteğe bağlı Elasticsearch ürün araması
+- Docker desteği
 
-## Proje yapısı
+## Klasör yapısı
 
-- `index.html`: Yönetim panelinin HTML yapısı
+- `server.js`: API sunucusu
+- `src/`: Veritabanı, oturum ve Elasticsearch modülleri
+- `index.html`: Yönetim paneli
 - `css/style.css`: Arayüz tasarımı
-- `js/app.js`: Arayüz işlemleri
-- `js/storage.js`: Tarayıcı veri ve oturum işlemleri
-- `proje.c`: Ana C uygulaması
-- `proje_elasticsearch.c`: Elasticsearch destekli C uygulaması
-- `Dump20260721.sql`: MySQL veritabanı yapısı
+- `js/app.js`: API'ye bağlı arayüz işlemleri
+- `js/storage.js`: Güvenli oturum bilgileri
+- `database/migration.sql`: Mevcut veritabanını güncelleme dosyası
+- `proje.c`: Konsol uygulaması
+- `proje_elasticsearch.c`: Elasticsearch destekli konsol uygulaması
 
-## Veritabanı parolası
+## İlk kurulum
 
-MySQL parolası kaynak kodda tutulmaz. Programı çalıştırmadan önce PowerShell'de ortam değişkenini ayarlayın:
+1. Node.js LTS sürümünü kurun.
+2. MySQL Workbench'te `database/migration.sql` dosyasını çalıştırın.
+3. `.env.example` dosyasının kopyasını `.env` adıyla oluşturun.
+4. `.env` içindeki `DB_PASSWORD` ve `JWT_SECRET` değerlerini doldurun.
+5. Proje klasöründe terminal açıp aşağıdaki komutları çalıştırın:
 
 ```powershell
-$env:ECOMMERCE_DB_PASSWORD="MYSQL_PAROLANIZ"
+npm install
+npm start
 ```
 
-Ardından programı aynı terminal üzerinden çalıştırın.
+6. Tarayıcıdan `http://localhost:3000` adresini açın.
 
-## Arayüzü çalıştırma
+`index.html` dosyasını doğrudan açmak artık yeterli değildir; gerçek MySQL bağlantısı için uygulama `npm start` ile çalıştırılmalıdır.
 
-`index.html` dosyasını tarayıcıda açın. Arayüz şu anda tarayıcının yerel depolama alanını kullanır; C/MySQL uygulamasına doğrudan bağlı değildir.
+## Docker ile çalıştırma
+
+`.env` dosyası hazırlandıktan sonra:
+
+```powershell
+docker compose up --build
+```
+
+Elasticsearch kullanılmayacaksa `.env` içinde `ELASTICSEARCH_ENABLED=false` bırakın. Kullanılacaksa `true` yapın.
+
+## Güvenlik
+
+- MySQL parolası ve JWT anahtarı GitHub'a yüklenmez.
+- Kullanıcı parolaları düz metin olarak değil bcrypt hash olarak saklanır.
+- API uçları giriş tokenı olmadan kullanılamaz.
+- SQL sorguları parametreli çalışır.
