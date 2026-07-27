@@ -1,62 +1,56 @@
-# E-Commerce Yönetim Sistemi
+# E-Ticaret Yönetim Sistemi
 
-C, MySQL, Node.js, HTML, CSS, JavaScript ve isteğe bağlı Elasticsearch kullanılan modüler e-ticaret yönetim projesi.
+MySQL, Node.js, HTML, CSS, JavaScript ve isteğe bağlı Elasticsearch kullanan e-ticaret yönetim projesi. Aynı arayüzün Cloudflare D1 ve R2 kullanan çevrim içi sürümü `online-site` klasöründedir.
 
-## Tamamlanan özellikler
+## Özellikler
 
-- Güvenli kullanıcı kayıt ve giriş sistemi (bcrypt + JWT)
-- MySQL bağlantılı ürün ve kategori yönetimi
-- Transaction kullanan sipariş oluşturma
-- Otomatik ve manuel stok hareketleri
-- Gerçek sistem logları ve dashboard değerleri
-- Modüler HTML, CSS ve JavaScript arayüzü
-- İsteğe bağlı Elasticsearch ürün araması
-- Docker desteği
+- Yönetici ve personel rolleri
+- Güvenli kayıt, giriş, oturum kapatma ve parola değiştirme
+- Hatalı giriş denemesi sınırlama
+- Ürün ekleme, düzenleme ve arşivleme
+- Kategori ekleme, düzenleme ve arşivleme
+- Bilgisayardan kalıcı ürün fotoğrafı yükleme
+- Çok ürünlü sipariş oluşturma
+- Sipariş durumu ve iptal işlemleri
+- Otomatik stok düşme ve iptalde stok iadesi
+- Manuel stok hareketleri ve sistem logları
+- Gerçek satış grafiği ve özet raporlar
+- Arama, filtreleme ve sayfalama
+- Ürün/sipariş CSV aktarımı ve JSON yedek
+- Yerelde Elasticsearch araması, bağlantı yoksa MySQL yedeği
 
-## Klasör yapısı
+## Çalıştırma
 
-- `server.js`: API sunucusu
-- `src/`: Veritabanı, oturum ve Elasticsearch modülleri
-- `index.html`: Yönetim paneli
-- `css/style.css`: Arayüz tasarımı
-- `js/app.js`: API'ye bağlı arayüz işlemleri
-- `js/storage.js`: Güvenli oturum bilgileri
-- `database/migration.sql`: Mevcut veritabanını güncelleme dosyası
-- `proje.c`: Konsol uygulaması
-- `proje_elasticsearch.c`: Elasticsearch destekli konsol uygulaması
+En kolay yöntem `baslat.bat` dosyasına çift tıklamaktır. Sunucu hazır olduğunda:
 
-## İlk kurulum
+`http://localhost:3000`
 
-1. Node.js LTS sürümünü kurun.
-2. MySQL Workbench'te `database/migration.sql` dosyasını çalıştırın.
-3. `.env.example` dosyasının kopyasını `.env` adıyla oluşturun.
-4. `.env` içindeki `DB_PASSWORD` ve `JWT_SECRET` değerlerini doldurun.
-5. Proje klasöründe terminal açıp aşağıdaki komutları çalıştırın:
+adresini açın. İlk çalıştırmada gerekli yeni veritabanı alanları otomatik hazırlanır.
+
+Alternatif:
 
 ```powershell
-npm install
 npm start
 ```
 
-6. Tarayıcıdan `http://localhost:3000` adresini açın.
+## Yetkiler
 
-`index.html` dosyasını doğrudan açmak artık yeterli değildir; gerçek MySQL bağlantısı için uygulama `npm start` ile çalıştırılmalıdır.
+- İlk oluşturulan hesap yönetici olur.
+- Sonraki hesaplar personel olur.
+- Yönetici ürün, kategori, stok, kullanıcı, log ve yedek işlemlerini yönetir.
+- Personel ürünleri görüntüler; sipariş oluşturur ve sipariş durumunu günceller.
 
-## Docker ile çalıştırma
+## Elasticsearch
 
-`.env` dosyası hazırlandıktan sonra:
+Docker Desktop açıkken `elasticsearch-baslat.bat` dosyasına çift tıklayın. `.env` içinde `ELASTICSEARCH_ENABLED=true` olduğunda yerel ürün aramaları Elasticsearch ile yapılır. Elasticsearch kapalıysa sistem otomatik olarak MySQL aramasına döner.
 
-```powershell
-docker compose up --build
-```
+## Önemli dosyalar
 
-Elasticsearch kullanılmayacaksa `.env` içinde `ELASTICSEARCH_ENABLED=false` bırakın. Kullanılacaksa `true` yapın.
+- `server-portable.js`: Kurulum gerektirmeyen yerel API
+- `index.html`: Yönetim paneli
+- `css/style.css`: Arayüz tasarımı
+- `js/app.js`: Arayüz ve API işlemleri
+- `database/migration.sql`: MySQL yükseltme betiği
+- `online-site/`: Canlı Sites sürümü
 
-Elasticsearch'i tek başına başlatmak için `elasticsearch-baslat.bat` dosyasına çift tıklayabilirsiniz. Uygulama başlarken MySQL'deki ürünler `products` indeksine aktarılır. Ürün aramaları Elasticsearch ile yapılır; ürün ekleme ve silme işlemleri indeksi otomatik günceller. Elasticsearch geçici olarak kapalıysa arama MySQL'e geri döner.
-
-## Güvenlik
-
-- MySQL parolası ve JWT anahtarı GitHub'a yüklenmez.
-- Kullanıcı parolaları düz metin olarak değil scrypt hash olarak saklanır; eski bcrypt kayıtları da desteklenir.
-- API uçları giriş tokenı olmadan kullanılamaz.
-- SQL sorguları parametreli çalışır.
+`.env` dosyasını ve gerçek parolaları GitHub'a yüklemeyin.

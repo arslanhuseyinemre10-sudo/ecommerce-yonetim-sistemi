@@ -5,10 +5,11 @@
   "description": "MySQL ve Elasticsearch destekli e-ticaret yönetim API'si",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server-portable.js",
     "start:portable": "node server-portable.js",
+    "start:express": "node server.js",
     "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check js/app.js"
+    "check": "node --check server-portable.js && node --check js/app.js && node --check online-site/worker-template.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Emre Commerce Yönetim Paneli</title>
+  <title>E-Ticaret Yönetim Sistemi</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <section class="auth-screen" id="authScreen">
   <div class="auth-hero">
-    <div class="auth-brand"><b>E</b> Emre Commerce</div>
+    <div class="auth-brand"><b>E</b> E-Ticaret Yönetim Sistemi</div>
     <div class="auth-copy">
       <h1>Tüm mağazan tek bir panelde.</h1>
-      <p>Ürünlerini, stoklarını ve siparişlerini hızlı ve güvenli biçimde yönet.</p>
-      <div class="auth-points"><span>✓ Stok takibi</span><span>✓ Sipariş yönetimi</span><span>✓ Detaylı raporlar</span></div>
+      <p>Ürünlerini, stoklarını ve siparişlerini güvenli biçimde yönet.</p>
+      <div class="auth-points"><span>✓ Rol tabanlı güvenlik</span><span>✓ Stok takibi</span><span>✓ Gerçek satış raporları</span></div>
     </div>
-    <small>© 2026 Emre Commerce</small>
+    <small>© 2026 E-Ticaret Yönetim Sistemi</small>
   </div>
   <div class="auth-panel">
     <div class="auth-box">
       <h2 id="authTitle">Tekrar hoş geldin</h2>
       <p id="authDesc">Devam etmek için hesabına giriş yap.</p>
       <form class="auth-form" id="authForm">
-        <div class="field hidden" id="emailField"><label>E-POSTA</label><input id="authEmail" type="email" placeholder="ornek@email.com"></div>
-        <div class="field"><label>KULLANICI ADI</label><input id="authUsername" required autocomplete="username" placeholder="Kullanıcı adın"></div>
-        <div class="field"><label>PAROLA</label><input id="authPassword" required type="password" autocomplete="current-password" placeholder="••••••••"></div>
+        <div class="field hidden" id="emailField"><label for="authEmail">E-POSTA</label><input id="authEmail" type="email" autocomplete="email" placeholder="ornek@email.com"></div>
+        <div class="field"><label for="authUsername">KULLANICI ADI</label><input id="authUsername" required autocomplete="username" placeholder="Kullanıcı adın"></div>
+        <div class="field"><label for="authPassword">PAROLA</label><input id="authPassword" required type="password" autocomplete="current-password" placeholder="••••••••"></div>
         <div class="auth-error" id="authError"></div>
         <button class="btn primary" id="authSubmit">Giriş yap</button>
       </form>
@@ -35,22 +35,28 @@
 
 <div class="app hidden" id="appRoot">
   <aside class="side" id="side">
-    <div class="logo"><div class="logo-mark">E</div> Emre Commerce</div>
+    <div class="logo"><div class="logo-mark">E</div> E-Ticaret Yönetim Sistemi</div>
     <nav class="nav" id="nav">
       <button class="active" data-page="dashboard"><span>⌂</span> Dashboard</button>
       <button data-page="products"><span>□</span> Ürünler</button>
       <button data-page="categories"><span>◇</span> Kategoriler</button>
       <button data-page="orders"><span>🛒</span> Siparişler</button>
       <button data-page="stock"><span>↕</span> Stok Hareketleri</button>
-      <button data-page="logs"><span>≡</span> Sistem Logları</button>
+      <button class="admin-only" data-page="users"><span>◎</span> Kullanıcılar</button>
+      <button class="admin-only" data-page="logs"><span>≡</span> Sistem Logları</button>
+      <button data-page="settings"><span>⚙</span> Hesabım</button>
     </nav>
-    <div class="profile"><div class="avatar" id="profileLetter">E</div><div><b id="profileName">Kullanıcı</b><small>Yönetici</small></div><button class="logout" id="logout">Çıkış</button></div>
+    <div class="profile">
+      <div class="avatar" id="profileLetter">E</div>
+      <div><b id="profileName">Kullanıcı</b><small id="profileRole">Personel</small></div>
+      <button class="logout" id="logout">Çıkış</button>
+    </div>
   </aside>
 
   <main>
     <header class="top">
-      <div><button class="btn mobile-menu" id="menuBtn">☰</button><h1 id="title">Dashboard</h1><p id="subtitle">E-ticaret sisteminin genel durumu</p></div>
-      <div class="actions"><button class="btn" id="refreshButton">↻ Yenile</button><button class="btn primary" id="addProductTop">+ Ürün ekle</button></div>
+      <div class="heading"><button class="btn mobile-menu" id="menuBtn">☰</button><div><h1 id="title">Dashboard</h1><p id="subtitle">E-ticaret sisteminin genel durumu</p></div></div>
+      <div class="actions"><button class="btn" id="refreshButton">↻ Yenile</button><button class="btn primary admin-only" id="addProductTop">+ Ürün ekle</button></div>
     </header>
 
     <section class="page active" id="dashboard">
@@ -58,22 +64,72 @@
         <div class="card metric"><div><label>Toplam ürün</label><strong id="productCount">0</strong><small>Aktif katalog</small></div><div class="icon">□</div></div>
         <div class="card metric"><div><label>Toplam stok</label><strong id="stockCount">0</strong><small>Mevcut birim</small></div><div class="icon">◇</div></div>
         <div class="card metric"><div><label>Siparişler</label><strong id="orderCount">0</strong><small>Toplam sipariş</small></div><div class="icon">🛒</div></div>
-        <div class="card metric"><div><label>Toplam satış</label><strong id="salesTotal">₺0</strong><small>Tüm zamanlar</small></div><div class="icon">₺</div></div>
+        <div class="card metric"><div><label>Toplam satış</label><strong id="salesTotal">₺0</strong><small>İptaller hariç</small></div><div class="icon">₺</div></div>
       </div>
       <div class="grid2">
-        <div class="card"><h2>Haftalık satış görünümü</h2><div class="chart"><div class="bar" style="height:42%" data-day="Pzt"></div><div class="bar" style="height:68%" data-day="Sal"></div><div class="bar" style="height:51%" data-day="Çar"></div><div class="bar" style="height:82%" data-day="Per"></div><div class="bar" style="height:61%" data-day="Cum"></div><div class="bar" style="height:94%" data-day="Cmt"></div><div class="bar" style="height:73%" data-day="Paz"></div></div></div>
+        <div class="card">
+          <div class="card-title"><h2>Satış görünümü</h2><select id="reportDays" aria-label="Rapor dönemi"><option value="7">Son 7 gün</option><option value="30">Son 30 gün</option><option value="90">Son 90 gün</option></select></div>
+          <div class="chart" id="salesChart"></div>
+          <div class="chart-total" id="chartSummary">Bu dönemde satış yok.</div>
+        </div>
         <div class="card"><h2>Stoku azalan ürünler</h2><div id="lowStock"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h2>Sipariş durumları</h2><div class="summary-list" id="statusSummary"></div></div>
+        <div class="card"><h2>Kategori dağılımı</h2><div class="summary-list" id="categorySummary"></div></div>
       </div>
     </section>
 
     <section class="page" id="products">
-      <div class="toolbar"><input class="search" id="productSearch" placeholder="Ürün ara..."><button class="btn primary" id="addProduct">+ Yeni ürün</button></div>
+      <div class="toolbar">
+        <input class="search" id="productSearch" placeholder="Ürün veya kategori ara...">
+        <select id="productStatus" class="compact admin-only"><option value="active">Aktif ürünler</option><option value="all">Tümü</option></select>
+        <button class="btn admin-only" id="exportProducts">CSV indir</button>
+        <button class="btn primary admin-only" id="addProduct">+ Yeni ürün</button>
+      </div>
+      <div class="search-source" id="searchSource"></div>
       <div class="table-wrap"><table><thead><tr><th>ID</th><th>Ürün</th><th>Kategori</th><th>Fiyat</th><th>Stok</th><th>Durum</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
+      <div class="pager" id="productPager"></div>
     </section>
-    <section class="page" id="categories"><div class="cards" id="categoryCards"></div></section>
-    <section class="page" id="orders"><div class="toolbar"><button class="btn primary" id="addOrder">+ Yeni sipariş</button></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Kullanıcı</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>Tarih</th></tr></thead><tbody id="orderRows"></tbody></table></div></section>
-    <section class="page" id="stock"><div class="toolbar"><button class="btn primary" id="changeStock">+ Stok değiştir</button></div><div class="table-wrap"><table><thead><tr><th>Ürün</th><th>Değişim</th><th>Neden</th><th>Kullanıcı</th><th>Tarih</th></tr></thead><tbody id="stockRows"></tbody></table></div></section>
-    <section class="page" id="logs"><div class="table-wrap"><table><thead><tr><th>İşlem</th><th>Açıklama</th><th>Kullanıcı</th><th>Tarih</th></tr></thead><tbody id="logRows"></tbody></table></div></section>
+
+    <section class="page" id="categories">
+      <div class="toolbar admin-only"><button class="btn primary" id="addCategory">+ Yeni kategori</button></div>
+      <div class="cards category-grid" id="categoryCards"></div>
+    </section>
+
+    <section class="page" id="orders">
+      <div class="toolbar">
+        <input class="search" id="orderSearch" placeholder="Müşteri veya sipariş no ara...">
+        <select id="orderStatus" class="compact"><option value="">Tüm durumlar</option></select>
+        <button class="btn admin-only" id="exportOrders">CSV indir</button>
+        <button class="btn primary" id="addOrder">+ Yeni sipariş</button>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>Tarih</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div>
+      <div class="pager" id="orderPager"></div>
+    </section>
+
+    <section class="page" id="stock">
+      <div class="toolbar"><button class="btn primary admin-only" id="changeStock">+ Stok değiştir</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Ürün</th><th>Değişim</th><th>Neden</th><th>Kullanıcı</th><th>Tarih</th></tr></thead><tbody id="stockRows"></tbody></table></div>
+      <div class="pager" id="stockPager"></div>
+    </section>
+
+    <section class="page admin-only" id="users">
+      <div class="toolbar"><div class="notice">Yönetici tüm işlemleri yapabilir. Personel ürünleri görüntüler, sipariş oluşturur ve sipariş durumunu günceller.</div><button class="btn" id="downloadBackup">Yedek indir</button></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Kullanıcı</th><th>E-posta</th><th>Rol</th><th>Kayıt</th></tr></thead><tbody id="userRows"></tbody></table></div>
+    </section>
+
+    <section class="page admin-only" id="logs">
+      <div class="table-wrap"><table><thead><tr><th>İşlem</th><th>Açıklama</th><th>Kullanıcı</th><th>Tarih</th></tr></thead><tbody id="logRows"></tbody></table></div>
+      <div class="pager" id="logPager"></div>
+    </section>
+
+    <section class="page" id="settings">
+      <div class="settings-grid">
+        <div class="card"><h2>Hesap bilgileri</h2><dl><dt>Kullanıcı</dt><dd id="accountUsername">-</dd><dt>E-posta</dt><dd id="accountEmail">-</dd><dt>Rol</dt><dd id="accountRole">-</dd></dl></div>
+        <div class="card"><h2>Güvenlik</h2><p>Parolanı düzenli aralıklarla yenile. Diğer açık oturumların parola değişiminden sonra kapatılır.</p><button class="btn primary" id="changePassword">Parolayı değiştir</button></div>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -81,30 +137,56 @@
 
 <dialog id="productDialog">
   <form class="modal" id="productForm">
-    <h2>Yeni ürün ekle</h2>
+    <h2 id="productDialogTitle">Yeni ürün ekle</h2>
+    <input id="pId" type="hidden">
     <div class="form">
-      <div class="field full"><label>ÜRÜN ADI</label><input id="pName" required placeholder="Örn. Gaming Laptop"></div>
-      <div class="field"><label>FİYAT</label><input id="pPrice" required type="number" min="0" step="0.01"></div>
-      <div class="field"><label>STOK</label><input id="pStock" required type="number" min="0"></div>
-      <div class="field full"><label>KATEGORİ</label><select id="pCategory" required></select></div>
+      <div class="field full"><label for="pName">ÜRÜN ADI</label><input id="pName" required maxlength="120" placeholder="Örn. Gaming Laptop"></div>
+      <div class="field"><label for="pPrice">FİYAT</label><input id="pPrice" required type="number" min="0" step="0.01"></div>
+      <div class="field"><label for="pStock">STOK</label><input id="pStock" required type="number" min="0"></div>
+      <div class="field full"><label for="pCategory">KATEGORİ</label><select id="pCategory" required></select></div>
+      <div class="field full"><label for="pImageFile">BİLGİSAYARDAN FOTOĞRAF</label><input id="pImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><small>En fazla 5 MB. Seçersen kalıcı olarak yüklenir.</small></div>
+      <div class="field full"><label for="pImage">VEYA FOTOĞRAF URL'Sİ</label><input id="pImage" type="url" placeholder="https://..."></div>
+      <label class="check full"><input id="pActive" type="checkbox" checked> Ürün aktif</label>
     </div>
-    <div class="modal-actions"><button type="button" class="btn" id="cancel">Vazgeç</button><button class="btn primary">Ürünü kaydet</button></div>
+    <div class="modal-actions"><button type="button" class="btn" id="cancelProduct">Vazgeç</button><button class="btn primary" id="saveProduct">Ürünü kaydet</button></div>
+  </form>
+</dialog>
+
+<dialog id="categoryDialog">
+  <form class="modal" id="categoryForm">
+    <h2 id="categoryDialogTitle">Yeni kategori</h2>
+    <input id="cId" type="hidden">
+    <div class="form"><div class="field full"><label for="cName">KATEGORİ ADI</label><input id="cName" required maxlength="60"></div><label class="check full"><input id="cActive" type="checkbox" checked> Kategori aktif</label></div>
+    <div class="modal-actions"><button type="button" class="btn" id="cancelCategory">Vazgeç</button><button class="btn primary">Kaydet</button></div>
   </form>
 </dialog>
 
 <dialog id="orderDialog">
-  <form class="modal" id="orderForm"><h2>Yeni sipariş</h2><div class="form">
-    <div class="field full"><label>ÜRÜN</label><select id="orderProduct" required></select></div>
-    <div class="field full"><label>ADET</label><input id="orderQuantity" required type="number" min="1" value="1"></div>
-  </div><div class="modal-actions"><button type="button" class="btn" id="cancelOrder">Vazgeç</button><button class="btn primary">Siparişi oluştur</button></div></form>
+  <form class="modal wide" id="orderForm">
+    <h2>Yeni sipariş</h2>
+    <div class="form">
+      <div class="field"><label for="orderCustomer">MÜŞTERİ ADI</label><input id="orderCustomer" required maxlength="80" placeholder="Ad Soyad"></div>
+      <div class="field"><label for="orderDate">SİPARİŞ TARİHİ</label><input id="orderDate" required type="date"></div>
+    </div>
+    <div class="order-items-head"><b>Sipariş ürünleri</b><button type="button" class="link" id="addOrderItem">+ Ürün satırı ekle</button></div>
+    <div id="orderItems"></div>
+    <div class="modal-actions"><button type="button" class="btn" id="cancelOrder">Vazgeç</button><button class="btn primary">Siparişi oluştur</button></div>
+  </form>
 </dialog>
 
 <dialog id="stockDialog">
   <form class="modal" id="stockForm"><h2>Stok değiştir</h2><div class="form">
-    <div class="field full"><label>ÜRÜN</label><select id="stockProduct" required></select></div>
-    <div class="field"><label>DEĞİŞİM</label><input id="stockChange" required type="number" placeholder="Örn. 10 veya -2"></div>
-    <div class="field"><label>NEDEN</label><input id="stockReason" required maxlength="50" value="Manuel"></div>
+    <div class="field full"><label for="stockProduct">ÜRÜN</label><select id="stockProduct" required></select></div>
+    <div class="field"><label for="stockChange">DEĞİŞİM</label><input id="stockChange" required type="number" placeholder="Örn. 10 veya -2"></div>
+    <div class="field"><label for="stockReason">NEDEN</label><input id="stockReason" required maxlength="50" value="Manuel"></div>
   </div><div class="modal-actions"><button type="button" class="btn" id="cancelStock">Vazgeç</button><button class="btn primary">Stoku kaydet</button></div></form>
+</dialog>
+
+<dialog id="passwordDialog">
+  <form class="modal" id="passwordForm"><h2>Parolayı değiştir</h2><div class="form">
+    <div class="field full"><label for="currentPassword">MEVCUT PAROLA</label><input id="currentPassword" required type="password" autocomplete="current-password"></div>
+    <div class="field full"><label for="newPassword">YENİ PAROLA</label><input id="newPassword" required minlength="8" type="password" autocomplete="new-password"></div>
+  </div><div class="modal-actions"><button type="button" class="btn" id="cancelPassword">Vazgeç</button><button class="btn primary">Parolayı güncelle</button></div></form>
 </dialog>
 
 <script src="js/storage.js"></script>

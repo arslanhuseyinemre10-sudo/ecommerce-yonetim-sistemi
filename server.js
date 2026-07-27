@@ -258,7 +258,7 @@ const port = Number(process.env.PORT || 3000);
 app.listen(port, async () => {
   try {
     await pool.query('SELECT 1');
-    console.log(`Emre Commerce: http://localhost:${port}`);
+    console.log(`E-Ticaret Yönetim Sistemi: http://localhost:${port}`);
     console.log('MySQL bağlantısı başarılı.');
     if (elastic.enabled()) {
       const [products] = await pool.query(`
